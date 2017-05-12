@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ToDoViewHolder> {
 
-    private ArrayList<ToDoEntry> mToDoEntries;
+    private ArrayList<ToDo> mToDoEntries;
     private Context mContext;
 
-    public ListAdapter(Context context, ArrayList<ToDoEntry> toDoEntries) {
+    public ListAdapter(Context context, ArrayList<ToDo> toDoEntries) {
         mContext = context;
         mToDoEntries = toDoEntries;
     }
@@ -47,7 +47,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ToDoViewHolder
             super(view);
         }
 
-        public void fillContent(ToDoEntry entry) {
+        public void fillContent(ToDo entry) {
             title.setText(entry.title);
             text.setText(entry.text);
 
