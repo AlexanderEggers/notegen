@@ -31,16 +31,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public long insert(String table, ContentValues values) throws SQLException {
+        SQLiteDatabase db = getWritableDatabase();
+        long insertedID;
+
+        db.beginTransaction();
         switch (table) {
             case ToDoTable.TABLE_NAME:
-                return ToDoTable.insert(getWritableDatabase(), values);
+                insertedID = ToDoTable.insert(db, values);
+                break;
             case LabelTable.TABLE_NAME:
-                return LabelTable.insert(getWritableDatabase(), values);
+                insertedID = LabelTable.insert(db, values);
+                break;
             case ToDoLabelTable.TABLE_NAME:
-                return ToDoLabelTable.insert(getWritableDatabase(), values);
+                insertedID = ToDoLabelTable.insert(db, values);
+                break;
             default:
+                db.endTransaction();
                 throw new SQLException("SQL Table is not existing.");
         }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        return insertedID;
     }
 
     public Cursor queue(String table, String primaryKey, String[] projection, String selection,
@@ -48,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         switch (table) {
             case ToDoTable.TABLE_NAME:
                 return ToDoTable.queue(getReadableDatabase(), primaryKey, projection, selection,
-                        selectionArgs, sortOrder);
+                    selectionArgs, sortOrder);
             case LabelTable.TABLE_NAME:
                 return LabelTable.queue(getReadableDatabase(), primaryKey, projection, selection,
                         selectionArgs, sortOrder);
@@ -61,28 +72,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int update(String table, String primaryKey, ContentValues values) {
+        SQLiteDatabase db = getWritableDatabase();
+        int updatedID;
+
+        db.beginTransaction();
         switch (table) {
             case ToDoTable.TABLE_NAME:
-                return ToDoTable.update(getWritableDatabase(), primaryKey, values);
+                updatedID = ToDoTable.update(db, primaryKey, values);
+                break;
             case LabelTable.TABLE_NAME:
-                return LabelTable.update(getWritableDatabase(), primaryKey, values);
+                updatedID = LabelTable.update(db, primaryKey, values);
+                break;
             case ToDoLabelTable.TABLE_NAME:
-                return ToDoLabelTable.update(getWritableDatabase(), primaryKey, values);
+                updatedID = ToDoLabelTable.update(db, primaryKey, values);
+                break;
             default:
+                db.endTransaction();
                 throw new SQLException("SQL Table is not existing.");
         }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        return updatedID;
     }
 
     public int delete(String table, String primaryKey) {
+        SQLiteDatabase db = getWritableDatabase();
+        int deletedID;
+
+        db.beginTransaction();
         switch (table) {
             case ToDoTable.TABLE_NAME:
-                return ToDoTable.delete(getWritableDatabase(), primaryKey);
+                deletedID = ToDoTable.delete(db, primaryKey);
+                break;
             case LabelTable.TABLE_NAME:
-                return LabelTable.delete(getWritableDatabase(), primaryKey);
+                deletedID = LabelTable.delete(db, primaryKey);
+                break;
             case ToDoLabelTable.TABLE_NAME:
-                return ToDoLabelTable.delete(getWritableDatabase(), primaryKey);
+                deletedID = ToDoLabelTable.delete(db, primaryKey);
+                break;
             default:
+                db.endTransaction();
                 throw new SQLException("SQL Table is not existing.");
         }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        return deletedID;
     }
 }

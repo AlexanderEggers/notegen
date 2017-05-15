@@ -7,4 +7,5 @@ public class ToDo {
     public String title, text;
     public boolean isArchived, isDeleted;
     public ArrayList<Integer> labels;
+    public long creationDate, lastModifyDate;
 }

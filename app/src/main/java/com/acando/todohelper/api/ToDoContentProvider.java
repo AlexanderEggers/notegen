@@ -120,37 +120,42 @@ public class ToDoContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int uriType = sURIMatcher.match(uri), id;
+        int uriType = sURIMatcher.match(uri);
         switch (uriType) {
             case LABEL_SINGLE:
-                id = mDatabase.delete(LabelTable.TABLE_NAME, uri.getLastPathSegment());
-                break;
+                return mDatabase.delete(LabelTable.TABLE_NAME, uri.getLastPathSegment());
             case TODO_SINGLE:
-                id = mDatabase.delete(ToDoTable.TABLE_NAME, uri.getLastPathSegment());
-                break;
+                return mDatabase.delete(ToDoTable.TABLE_NAME, uri.getLastPathSegment());
             case TODO_LABELS:
-                id = mDatabase.delete(ToDoLabelTable.TABLE_NAME,
+                return mDatabase.delete(ToDoLabelTable.TABLE_NAME,
                         ToDoLabelTable.COLUMN_TODO_ID + "= " + uri.getLastPathSegment());
-                break;
             case LABEL_TODOS:
-                id = mDatabase.delete(ToDoLabelTable.TABLE_NAME,
+                return mDatabase.delete(ToDoLabelTable.TABLE_NAME,
                         ToDoLabelTable.COLUMN_LABEL_INTERNAL_NAME + "= '" + uri.getLastPathSegment() + "'");
-                break;
             default:
                 throw new SQLException("Uri Format not supported for this operation");
         }
-        return id;
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int uriType = sURIMatcher.match(uri), id;
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
+        int uriType = sURIMatcher.match(uri);
         switch (uriType) {
-
+            case LABEL_SINGLE:
+                return  mDatabase.update(LabelTable.TABLE_NAME, uri.getLastPathSegment(), values);
+            case TODO_SINGLE:
+                return mDatabase.update(ToDoTable.TABLE_NAME, uri.getLastPathSegment(), values);
+            case TODO_LABELS:
+                return mDatabase.update(ToDoLabelTable.TABLE_NAME,
+                        ToDoLabelTable.COLUMN_TODO_ID + "= " + uri.getLastPathSegment(), values);
+            case LABEL_TODOS:
+                return mDatabase.update(ToDoLabelTable.TABLE_NAME,
+                        ToDoLabelTable.COLUMN_LABEL_INTERNAL_NAME + "= '"
+                                + uri.getLastPathSegment() + "'", values);
+            default:
+                throw new SQLException("Uri Format not supported for this operation");
         }
-
-
-        return 0;
     }
 
     @Nullable

@@ -1,6 +1,7 @@
 package com.acando.todohelper.internal;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ToDoViewHolder
         holder.fillContent(mToDoEntries.get(position));
     }
 
+    public void refreshContent(ArrayList<ToDo> toDoEntries) {
+        mToDoEntries = toDoEntries;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mToDoEntries != null ? mToDoEntries.size() : 0;
@@ -45,18 +51,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ToDoViewHolder
 
         public ToDoViewHolder(View view) {
             super(view);
+            title = (TextView) view.findViewById(R.id.title);
+            text = (TextView) view.findViewById(R.id.text);
+            view.findViewById(R.id.todo_entry_layout).setOnClickListener(this);
         }
 
         public void fillContent(ToDo entry) {
             title.setText(entry.title);
             text.setText(entry.text);
-
-            //Fetch labels from database according to the ids and add it's name to the linearlayout
         }
 
         @Override
         public void onClick(View v) {
-            //open todo detail view
+            Snackbar.make(v, "Test successful", Snackbar.LENGTH_SHORT).show();
         }
     }
 }
