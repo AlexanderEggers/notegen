@@ -10,7 +10,7 @@ import android.os.Build;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.acando.todohelper.UtilNetwork;
+import com.acando.todohelper.internal.UtilNetwork;
 import com.acando.todohelper.database.ToDoTable;
 
 import java.io.ByteArrayOutputStream;

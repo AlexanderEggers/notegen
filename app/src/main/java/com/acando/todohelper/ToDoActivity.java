@@ -1,25 +1,22 @@
-package com.acando.todohelper.internal;
+package com.acando.todohelper;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.acando.todohelper.R;
 import com.acando.todohelper.api.ToDoContentProvider;
 import com.acando.todohelper.database.UtilDatabase;
+import com.acando.todohelper.internal.ToDo;
+import com.acando.todohelper.internal.ToDoListAdapter;
 
 import java.util.ArrayList;
 

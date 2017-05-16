@@ -1,4 +1,4 @@
-package com.acando.todohelper;
+package com.acando.todohelper.internal;
 
 import android.content.Context;
 import android.graphics.Bitmap;

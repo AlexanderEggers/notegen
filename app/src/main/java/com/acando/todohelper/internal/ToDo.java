@@ -6,4 +6,5 @@ public class ToDo implements Serializable {
     public int id;
     public String title, text;
     public long lastModifyDate;
+    public byte[] imageByte;
 }

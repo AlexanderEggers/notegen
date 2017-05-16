@@ -20,14 +20,17 @@ public class SyncService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         String title = intent.getStringExtra("title");
         String text = intent.getStringExtra("text");
+        byte[] image = intent.getByteArrayExtra("image");
         int id = intent.getIntExtra("id", -1);
-
-        System.out.println("ID: " + id);
 
         ContentValues values = new ContentValues();
         values.put(ToDoTable.COLUMN_TITLE, title);
         values.put(ToDoTable.COLUMN_TEXT, text);
         values.put(ToDoTable.COLUMN_LAST_MODIFY, System.currentTimeMillis());
+
+        if(image != null && image.length != 0) {
+            values.put(ToDoTable.COLUMN_IMAGE, image);
+        }
 
         ContentProviderClient yourCR = getContentResolver().acquireContentProviderClient(
                 ToDoContentProvider.AUTHORITY);
