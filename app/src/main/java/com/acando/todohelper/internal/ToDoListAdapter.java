@@ -1,6 +1,7 @@
 package com.acando.todohelper.internal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,24 +14,24 @@ import com.acando.todohelper.R;
 
 import java.util.ArrayList;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ToDoViewHolder> {
+public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoViewHolder> {
 
     private ArrayList<ToDo> mToDoEntries;
     private Context mContext;
 
-    public ListAdapter(Context context, ArrayList<ToDo> toDoEntries) {
+    public ToDoListAdapter(Context context, ArrayList<ToDo> toDoEntries) {
         mContext = context;
         mToDoEntries = toDoEntries;
     }
 
     @Override
-    public ListAdapter.ToDoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_list_entry, null);
+    public ToDoListAdapter.ToDoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_todo_entry, null);
         return new ToDoViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ListAdapter.ToDoViewHolder holder, int position) {
+    public void onBindViewHolder(ToDoListAdapter.ToDoViewHolder holder, int position) {
         holder.fillContent(mToDoEntries.get(position));
     }
 
@@ -63,7 +64,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ToDoViewHolder
 
         @Override
         public void onClick(View v) {
-            Snackbar.make(v, "Test successful", Snackbar.LENGTH_SHORT).show();
+            Intent intent = new Intent(mContext, DetailActivity.class);
+            intent.putExtra("todo_object", mToDoEntries.get(getAdapterPosition()));
+            mContext.startActivity(intent);
         }
     }
 }

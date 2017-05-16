@@ -14,18 +14,27 @@
         android:theme="@style/AppTheme">
 
         <provider
-            android:exported="false"
+            android:name=".api.ToDoContentProvider"
             android:authorities="com.acando.todohelper.api.ToDoContentProvider"
-            android:name=".api.ToDoContentProvider" >
-        </provider>
+            android:exported="false" />
 
-        <activity android:name=".internal.MainActivity">
+        <activity
+            android:name=".internal.ToDoActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:label=""
+            android:name=".internal.DetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service android:name=".internal.SyncService" android:exported="false" />
+
     </application>
 
 </manifest>

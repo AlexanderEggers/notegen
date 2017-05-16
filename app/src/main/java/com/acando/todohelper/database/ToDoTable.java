@@ -15,17 +15,15 @@ public class ToDoTable {
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_TEXT = "text";
     public static final String COLUMN_IMAGE = "image";
-    public static final String COLUMN_CREATION_DATE = "creation_date";
     public static final String COLUMN_LAST_MODIFY = "last_modify";
 
     // Database creation SQL statement
     private static final String DATABASE_CREATE =
             "CREATE TABLE " + TABLE_NAME + "("
                     + COLUMN_ID + "               INTEGER       PRIMARY KEY             AUTOINCREMENT, "
-                    + COLUMN_TITLE + "            TEXT                                  NOT NULL, "
-                    + COLUMN_TEXT + "             TEXT                                  NOT NULL, "
+                    + COLUMN_TITLE + "            TEXT                                  , "
+                    + COLUMN_TEXT + "             TEXT                                  , "
                     + COLUMN_IMAGE + "            BLOB                                  , "
-                    + COLUMN_CREATION_DATE + "    INTEGER                               NOT NULL, "
                     + COLUMN_LAST_MODIFY + "      INTEGER                               NOT NULL);";
 
 
@@ -67,7 +65,7 @@ public class ToDoTable {
         }
 
         if (sortOrder == null || sortOrder.equals("")) {
-            sortOrder = COLUMN_LAST_MODIFY;
+            sortOrder = COLUMN_LAST_MODIFY + " DESC";
         }
 
         return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);

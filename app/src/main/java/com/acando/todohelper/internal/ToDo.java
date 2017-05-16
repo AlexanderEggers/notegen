@@ -1,11 +1,9 @@
 package com.acando.todohelper.internal;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class ToDo {
+public class ToDo implements Serializable {
     public int id;
     public String title, text;
-    public boolean isArchived, isDeleted;
-    public ArrayList<Integer> labels;
-    public long creationDate, lastModifyDate;
+    public long lastModifyDate;
 }
