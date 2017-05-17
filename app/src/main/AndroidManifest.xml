@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.acando.todohelper">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    android:installLocation="auto"
+    package="com.acando.notegen">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
+        android:resizeableActivity="true"
         android:theme="@style/AppTheme">
 
         <provider
-            android:name=".api.ToDoContentProvider"
-            android:authorities="com.acando.todohelper.api.ToDoContentProvider"
+            android:name="com.acando.notegen.api.NoteContentProvider"
+            android:authorities="com.acando.notegen.api.NoteContentProvider"
             android:exported="false" />
 
         <activity
-            android:name=".ToDoActivity"
+            android:name="com.acando.notegen.NoteListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,10 +29,13 @@
 
         <activity
             android:label=""
-            android:name=".DetailActivity"
+            android:name="com.acando.notegen.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name=".internal.SyncService" android:exported="false" />
+        <activity
+            android:label="Labels"
+            android:name="com.acando.notegen.LabelListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 

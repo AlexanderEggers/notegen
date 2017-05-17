@@ -3,4 +3,7 @@
     <color name="colorPrimary">#ffd840</color>
     <color name="colorPrimaryDark">#ccac33</color>
     <color name="colorAccent">#000000</color>
+
+    <color name="label_active">#008015</color>
+    <color name="label_not_active">#B90000</color>
 </resources>

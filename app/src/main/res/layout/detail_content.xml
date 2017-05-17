@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:layout_height="match_parent">
+    tools:context=".DetailActivity"
+    tools:showIn="@layout/activity_detail">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:showIn="@layout/activity_detail">
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/title"
@@ -18,7 +21,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
             android:gravity="start"
-            android:hint="Enter todo title"
+            android:hint="Enter title"
+            android:imeOptions="flagNoExtractUi"
             android:paddingBottom="8dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -32,40 +36,33 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
             android:gravity="start"
-            android:hint="Enter todo text"
+            android:hint="Enter text"
+            android:imeOptions="flagNoExtractUi"
             android:minHeight="300dp"
             android:paddingBottom="8dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="8dp" />
 
-        <RelativeLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/label_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:paddingBottom="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="8dp"
-            android:minHeight="150dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:visibility="invisible"
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/add_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:onClick="addImage"
-                android:layout_margin="16dp"
-                android:background="@android:color/darker_gray"
-                android:src="@drawable/ic_add_white_24dp" />
-
-        </RelativeLayout>
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
@@ -78,11 +75,6 @@
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:padding="16dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#22000000" />
 
     </LinearLayout>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.acando.todohelper.widget.ConfigActivity"
+    android:configure="com.acando.notegen.widget.ConfigActivity"
     android:initialLayout="@layout/widget_layout"
     android:minHeight="110dp"
     android:minWidth="250dp"
