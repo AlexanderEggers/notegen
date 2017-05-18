@@ -14,14 +14,20 @@ public class NoteTable {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_TEXT = "text";
+    public static final String COLUMN_ARCHIVE = "archive";
+    public static final String COLUMN_BIN = "bin";
     public static final String COLUMN_IMAGE = "image";
     public static final String COLUMN_LAST_MODIFY = "last_modify";
+
+    public static final int TRUE = 1, FALSE = 0;
 
     public static final int COLUMN_ID_INDEX = 0;
     public static final int COLUMN_TITLE_INDEX = 1;
     public static final int COLUMN_TEXT_INDEX = 2;
-    public static final int COLUMN_IMAGE_INDEX = 3;
-    public static final int COLUMN_LAST_MODIFY_INDEX = 4;
+    public static final int COLUMN_ARCHIVE_INDEX = 3;
+    public static final int COLUMN_BIN_INDEX = 4;
+    public static final int COLUMN_IMAGE_INDEX = 5;
+    public static final int COLUMN_LAST_MODIFY_INDEX = 6;
 
     // Database creation SQL statement
     private static final String DATABASE_CREATE =
@@ -29,6 +35,8 @@ public class NoteTable {
                     + COLUMN_ID + "               INTEGER       PRIMARY KEY             AUTOINCREMENT, "
                     + COLUMN_TITLE + "            TEXT                                  , "
                     + COLUMN_TEXT + "             TEXT                                  , "
+                    + COLUMN_ARCHIVE + "          TEXT                                  NOT NULL, "
+                    + COLUMN_BIN + "              TEXT                                  NOT NULL, "
                     + COLUMN_IMAGE + "            BLOB                                  , "
                     + COLUMN_LAST_MODIFY + "      INTEGER                               NOT NULL);";
 

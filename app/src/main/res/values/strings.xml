@@ -1,7 +1,6 @@
 <resources>
-    <string name="app_name">ToDo Helper</string>
-    <string name="title_activity_test">Test</string>
+    <string name="app_name">NoteGen</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="permission_desc">Grand access to allow this app to access your NoteGen Content.
+        This includes Notes and Labels.</string>
 </resources>

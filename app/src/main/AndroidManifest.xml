@@ -1,24 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:installLocation="auto"
-    package="com.acando.notegen">
+    package="com.acando.notegen"
+    android:installLocation="auto">
+
+    <uses-permission android:name="com.acando.notegen.api.READ" />
+
+    <permission
+        android:name="com.acando.notegen.api.READ"
+        android:description="@string/permission_desc"
+        android:icon="@drawable/ic_note_add_white_24dp"
+        android:label="Read access to your NoteGen Content"
+        android:protectionLevel="dangerous" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <application
         android:allowBackup="false"
+        android:backupAgent=".database.BackupAgent"
+        android:fullBackupContent="@xml/backup_schema"
+        android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:resizeableActivity="false"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
-        android:resizeableActivity="true"
         android:theme="@style/AppTheme">
+
+        <!-- TODO Get new backup key for this app!! -->
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIOQo2Admqa7S8_D7GaP973DfRxT69Zb1t3mkakA" />
 
         <provider
             android:name="com.acando.notegen.api.NoteContentProvider"
             android:authorities="com.acando.notegen.api.NoteContentProvider"
             android:exported="false" />
 
+        <provider
+            android:name="com.acando.notegen.api.PublicNoteContentProvider"
+            android:authorities="com.acando.notegen.api.PublicNoteContentProvider"
+            android:exported="true" />
+
         <activity
-            android:name="com.acando.notegen.NoteListActivity"
+            android:name=".AppStartActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,16 +55,55 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
+            android:name=".NoteListActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DetailActivity"
             android:label=""
-            android:name="com.acando.notegen.DetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LabelListActivity"
+            android:label="Labels"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SearchActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BinArchiveListActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity
-            android:label="Labels"
-            android:name="com.acando.notegen.LabelListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver
+            android:name=".widget.WidgetProvider" android:permission="com.acando.notegen.api.READ">
+            <intent-filter>
+
+                <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- To receive broadcast with this string name -->
+                <action android:name="com.acando.notegen.EXTRA_LIST_VIEW_ITEM_URL" />
+                <action android:name="com.acando.notegen.UPDATE_FORCE" />
+                <action android:name="com.acando.notegen.ADD_NOTE" />
+            </intent-filter>
+            <!-- linking up xml file of appwidget-provider to AppWidgetProvider -->
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_meta" />
+        </receiver>
+
+        <service
+            android:exported="false"
+            android:name=".widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".widget.ConfigActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
 
     </application>
 

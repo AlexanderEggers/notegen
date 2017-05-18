@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public class Note implements Serializable {
-    public int id;
+    public int id, isArchive, isTrash;
     public String title, text;
     public long lastModifyDate;
     public byte[] imageByte;

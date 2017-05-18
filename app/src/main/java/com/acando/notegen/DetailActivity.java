@@ -26,10 +26,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.acando.notegen.api.NoteContentProvider;
+import com.acando.notegen.database.NoteTable;
 import com.acando.notegen.database.UtilDatabase;
 import com.acando.notegen.internal.Label;
 import com.acando.notegen.internal.LabelDetailAdapter;
 import com.acando.notegen.internal.Note;
+import com.acando.notegen.widget.WidgetProvider;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -69,9 +71,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         mTitle = (EditText) findViewById(R.id.title);
-        mTitle.addTextChangedListener(new CustomTextWatcher());
         mText = (EditText) findViewById(R.id.text);
-        mText.addTextChangedListener(new CustomTextWatcher());
         mImage = (ImageView) findViewById(R.id.image);
         TextView lastModify = (TextView) findViewById(R.id.last_modify);
 
@@ -84,7 +84,20 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         adapter = new LabelDetailAdapter(this, new ArrayList<Label>());
         recyclerView.setAdapter(adapter);
 
-        mNoteItem = (Note) getIntent().getSerializableExtra("todo_object");
+        boolean dataInline = getIntent().getBooleanExtra("dataInline", false);
+        if(dataInline) {
+            mNoteItem = new Note();
+            mNoteItem.id = getIntent().getIntExtra("note_id", -1);
+            mNoteItem.title = getIntent().getStringExtra("note_title");
+            mNoteItem.text = getIntent().getStringExtra("note_text");
+            mNoteItem.imageByte = getIntent().getByteArrayExtra("note_image");
+            mNoteItem.isArchive = getIntent().getIntExtra("note_archive", NoteTable.FALSE);
+            mNoteItem.isTrash = getIntent().getIntExtra("note_bin", NoteTable.FALSE);
+            mNoteItem.lastModifyDate = getIntent().getLongExtra("modify_date", -1);
+        } else {
+            mNoteItem = (Note) getIntent().getSerializableExtra("note_object");
+        }
+
         if (mNoteItem != null) {
             mTitle.setText(mNoteItem.title);
             mText.setText(mNoteItem.text);
@@ -114,6 +127,31 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             String formatted = formatter.format(cal.getTime());
             lastModify.setText("Last modify: " + formatted);
         }
+
+        mTitle.addTextChangedListener(new CustomTextWatcher());
+        mText.addTextChangedListener(new CustomTextWatcher());
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(mNoteItem.id != -1) {
+            if(mNoteItem.isArchive == NoteTable.TRUE) {
+                menu.findItem(R.id.archive).setTitle("Restore Note");
+                menu.findItem(R.id.delete).setVisible(false);
+            } else {
+                menu.findItem(R.id.archive).setTitle("Archive Note");
+                menu.findItem(R.id.delete).setVisible(true);
+            }
+
+            if(mNoteItem.isTrash == NoteTable.TRUE) {
+                menu.findItem(R.id.delete).setTitle("Restore Note");
+                menu.findItem(R.id.archive).setVisible(false);
+            } else {
+                menu.findItem(R.id.delete).setTitle("Delete Note");
+                menu.findItem(R.id.archive).setVisible(true);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -146,6 +184,33 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 intent.putExtra("active_labels", adapter.getList());
                 intent.putExtra("note_id", syncItem().id);
                 startActivity(intent);
+                return true;
+            case R.id.share:
+                intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_EMAIL, "");
+                intent.putExtra(Intent.EXTRA_CC, "");
+                intent.putExtra(Intent.EXTRA_TITLE, mNoteItem.title);
+                intent.putExtra(Intent.EXTRA_TEXT, mNoteItem.text);
+                startActivity(Intent.createChooser(intent, "Share note via"));
+                return true;
+            case R.id.archive:
+                mNoteItem.isArchive = mNoteItem.isArchive + 1 % 2;
+                mHasUpdateItem = true;
+
+                intent = new Intent(this, BinArchiveListActivity.class);
+                intent.putExtra("isArchive", true);
+                startActivity(intent);
+                finish();
+                return true;
+            case R.id.bin:
+                mNoteItem.isTrash = mNoteItem.isArchive + 1 % 2;
+                mHasUpdateItem = true;
+
+                intent = new Intent(this, BinArchiveListActivity.class);
+                intent.putExtra("isArchive", false);
+                startActivity(intent);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -192,6 +257,11 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 UtilDatabase.updateNote(this, mNoteItem);
             }
         }
+
+        Intent intent = new Intent();
+        intent.setAction(WidgetProvider.UPDATE_FORCE);
+        sendBroadcast(intent);
+
         return mNoteItem;
     }
 

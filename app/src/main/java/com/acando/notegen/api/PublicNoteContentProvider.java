@@ -14,7 +14,7 @@ import com.acando.notegen.database.LabelTable;
 import com.acando.notegen.database.NoteLabelTable;
 import com.acando.notegen.database.NoteTable;
 
-public class NoteContentProvider extends ContentProvider {
+public class PublicNoteContentProvider extends ContentProvider {
 
     private DatabaseHelper mDatabase;
 
@@ -23,7 +23,7 @@ public class NoteContentProvider extends ContentProvider {
             NOTE_SINGLE = 3, NOTE_MULTI = 4,
             NOTE_LABELS = 5, LABEL_NOTES = 6;
 
-    public static final String AUTHORITY = "com.acando.notegen.api.NoteContentProvider";
+    public static final String AUTHORITY = "com.acando.notegen.api.PublicNoteContentProvider";
 
     public static final String LABEL_BASE = "label";
     public static final String NOTE_BASE = "note";
@@ -85,74 +85,18 @@ public class NoteContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        int uriType = sURIMatcher.match(uri);
-        long id;
-        String basePath;
-
-        switch (uriType) {
-            case LABEL_SINGLE:
-            case LABEL_MULTI:
-                basePath = LABEL_BASE;
-                id = mDatabase.insert(LabelTable.TABLE_NAME, values);
-                break;
-            case NOTE_SINGLE:
-            case NOTE_MULTI:
-                basePath = NOTE_BASE;
-                id = mDatabase.insert(NoteTable.TABLE_NAME, values);
-                break;
-            case LABEL_NOTES:
-                basePath = LABEL_NOTES_BASE;
-                id = mDatabase.insert(NoteLabelTable.TABLE_NAME, values);
-                break;
-            case NOTE_LABELS:
-                basePath = NOTE_LABELS_BASE;
-                id = mDatabase.insert(NoteLabelTable.TABLE_NAME, values);
-                break;
-            default:
-                throw new RuntimeException("Uri Format not supported for this operation: " + uri + " type: " + uriType);
-        }
-
-        getContext().getContentResolver().notifyChange(uri, null);
-        return Uri.parse(NoteContentProvider.CONTENT_URI + basePath + "/" + id);
+        throw new RuntimeException("This URI Request is not supported");
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int uriType = sURIMatcher.match(uri);
-        switch (uriType) {
-            case LABEL_SINGLE:
-                return mDatabase.delete(LabelTable.TABLE_NAME, uri.getLastPathSegment(), null);
-            case NOTE_SINGLE:
-                return mDatabase.delete(NoteTable.TABLE_NAME, uri.getLastPathSegment(), null);
-            case NOTE_LABELS:
-                return mDatabase.delete(NoteLabelTable.TABLE_NAME,
-                        NoteLabelTable.COLUMN_NOTE_ID + " = " + uri.getLastPathSegment(), selection);
-            case LABEL_NOTES:
-                return mDatabase.delete(NoteLabelTable.TABLE_NAME,
-                        NoteLabelTable.COLUMN_LABEL_ID + " = " + uri.getLastPathSegment(), selection);
-            default:
-                throw new RuntimeException("Uri Format not supported for this operation: " + uri + " type: " + uriType);
-        }
+        throw new RuntimeException("This URI Request is not supported");
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection,
                       @Nullable String[] selectionArgs) {
-        int uriType = sURIMatcher.match(uri);
-        switch (uriType) {
-            case LABEL_SINGLE:
-                return  mDatabase.update(LabelTable.TABLE_NAME, uri.getLastPathSegment(), values);
-            case NOTE_SINGLE:
-                return mDatabase.update(NoteTable.TABLE_NAME, uri.getLastPathSegment(), values);
-            case NOTE_LABELS:
-                return mDatabase.update(NoteLabelTable.TABLE_NAME,
-                        NoteLabelTable.COLUMN_NOTE_ID + "= " + uri.getLastPathSegment(), values);
-            case LABEL_NOTES:
-                return mDatabase.update(NoteLabelTable.TABLE_NAME,
-                        NoteLabelTable.COLUMN_LABEL_ID + "= " + uri.getLastPathSegment(), values);
-            default:
-                throw new RuntimeException("Uri Format not supported for this operation: " + uri + " type: " + uriType);
-        }
+        throw new RuntimeException("This URI Request is not supported");
     }
 
     @Nullable

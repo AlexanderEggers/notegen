@@ -74,7 +74,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ToDoVi
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(mContext, DetailActivity.class);
-            intent.putExtra("todo_object", mNoteEntries.get(getAdapterPosition()));
+            intent.putExtra("note_object", mNoteEntries.get(getAdapterPosition()));
             mContext.startActivity(intent);
         }
     }

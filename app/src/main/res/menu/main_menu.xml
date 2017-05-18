@@ -7,4 +7,25 @@
         android:icon="@drawable/ic_note_add_white_24dp"
         android:title="Add item"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="Search"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/labels"
+        android:title="Show Labels"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/archive"
+        android:title="Show Archive"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/bin"
+        android:title="Show Bin"
+        app:showAsAction="never" />
 </menu>

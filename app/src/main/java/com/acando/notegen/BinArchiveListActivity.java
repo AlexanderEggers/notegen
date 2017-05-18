@@ -1,40 +1,37 @@
 package com.acando.notegen;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.acando.notegen.api.NoteContentProvider;
 import com.acando.notegen.database.NoteTable;
 import com.acando.notegen.database.UtilDatabase;
-import com.acando.notegen.internal.Label;
 import com.acando.notegen.internal.Note;
 import com.acando.notegen.internal.NoteListAdapter;
 
 import java.util.ArrayList;
 
-public class NoteListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BinArchiveListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private NoteListAdapter mAdapter;
     private int mLoaderID;
-    private Label mLabel;
+    private static final int ARCHIVE = 0, BIN = 1;
 
     @Override
     protected void onResume() {
         super.onResume();
         getSupportLoaderManager().destroyLoader(mLoaderID);
-        getSupportLoaderManager().initLoader(mLoaderID, null, NoteListActivity.this);
+        getSupportLoaderManager().initLoader(mLoaderID, null, this);
     }
 
     @Override
@@ -53,25 +50,19 @@ public class NoteListActivity extends AppCompatActivity implements LoaderManager
         mAdapter = new NoteListAdapter(this, new ArrayList<Note>());
         recyclerView.setAdapter(mAdapter);
 
-        Label label = (Label) getIntent().getSerializableExtra("label_object");
-        if(label != null) {
-            mLabel = label;
-            setTitle(label.name);
-            mLoaderID = 1;
-
-            if(getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setHomeButtonEnabled(true);
-            }
+        boolean isArchive = getIntent().getBooleanExtra("isArchive", false);
+        if(isArchive) {
+            setTitle("Archive");
+            mLoaderID = ARCHIVE;
         } else {
-            mLoaderID = 0;
+            setTitle("Bin");
+            mLoaderID = BIN;
         }
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
     }
 
     @Override
@@ -79,28 +70,6 @@ public class NoteListActivity extends AppCompatActivity implements LoaderManager
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-                return true;
-            case R.id.add_item:
-                Intent i = new Intent(this, DetailActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.search:
-                i = new Intent(this, SearchActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.labels:
-                i = new Intent(this, LabelListActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.archive:
-                i = new Intent(this, BinArchiveListActivity.class);
-                i.putExtra("isArchive", true);
-                startActivity(i);
-                return true;
-            case R.id.bin:
-                i = new Intent(this, BinArchiveListActivity.class);
-                i.putExtra("isArchive", false);
-                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -110,15 +79,13 @@ public class NoteListActivity extends AppCompatActivity implements LoaderManager
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri;
-        String selection = null;
-
-        if (id == 0) {
+        String selection;
+        if (id == ARCHIVE) {
             uri = Uri.parse(NoteContentProvider.CONTENT_URI + NoteContentProvider.NOTE_BASE);
-            selection = NoteTable.COLUMN_ARCHIVE + " = " + NoteTable.FALSE + " AND " +
-                    NoteTable.COLUMN_BIN + " = " + NoteTable.FALSE;
+            selection = NoteTable.COLUMN_ARCHIVE + " = " + NoteTable.TRUE;
         } else {
-            uri = Uri.parse(NoteContentProvider.CONTENT_URI + NoteContentProvider.LABEL_NOTES_BASE
-                    + "/" + mLabel.id);
+            uri = Uri.parse(NoteContentProvider.CONTENT_URI + NoteContentProvider.NOTE_BASE);
+            selection = NoteTable.COLUMN_BIN + " = " + NoteTable.TRUE;
         }
         return new CursorLoader(this, uri, null, selection, null, null);
     }

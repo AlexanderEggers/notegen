@@ -3,7 +3,6 @@ package com.acando.notegen.database;
 import android.content.ContentProviderClient;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
@@ -75,6 +74,8 @@ public class UtilDatabase {
         ContentValues values = new ContentValues();
         values.put(NoteTable.COLUMN_TITLE, note.title);
         values.put(NoteTable.COLUMN_TEXT, note.text);
+        values.put(NoteTable.COLUMN_ARCHIVE, false);
+        values.put(NoteTable.COLUMN_BIN, false);
         values.put(NoteTable.COLUMN_LAST_MODIFY, System.currentTimeMillis());
 
         if(note.imageByte != null && note.imageByte.length != 0) {
@@ -106,10 +107,8 @@ public class UtilDatabase {
         values.put(LabelTable.COLUMN_NAME, newName);
 
         try {
-            System.out.println("UPDATING");
             cr.update(uri, values, null, null);
         } catch (RemoteException e) {
-            System.out.println("TEST");
             e.printStackTrace();
         }
 
@@ -124,6 +123,8 @@ public class UtilDatabase {
         ContentValues values = new ContentValues();
         values.put(NoteTable.COLUMN_TITLE, note.title);
         values.put(NoteTable.COLUMN_TEXT, note.text);
+        values.put(NoteTable.COLUMN_ARCHIVE, note.isArchive);
+        values.put(NoteTable.COLUMN_BIN, note.isTrash);
         values.put(NoteTable.COLUMN_LAST_MODIFY, System.currentTimeMillis());
 
         if(note.imageByte != null && note.imageByte.length != 0) {
@@ -147,8 +148,10 @@ public class UtilDatabase {
                 item.id = data.getInt(0);
                 item.title = data.getString(1);
                 item.text = data.getString(2);
-                item.imageByte = data.getBlob(3);
-                item.lastModifyDate = data.getLong(4);
+                item.isArchive = data.getInt(3);
+                item.isTrash = data.getInt(4);
+                item.imageByte = data.getBlob(5);
+                item.lastModifyDate = data.getLong(6);
                 noteItems.add(item);
                 data.moveToNext();
             }
@@ -169,8 +172,10 @@ public class UtilDatabase {
                     item.id = noteData.getInt(0);
                     item.title = noteData.getString(1);
                     item.text = noteData.getString(2);
-                    item.imageByte = noteData.getBlob(3);
-                    item.lastModifyDate = noteData.getLong(4);
+                    item.isArchive = data.getInt(3);
+                    item.isTrash = data.getInt(4);
+                    item.imageByte = noteData.getBlob(5);
+                    item.lastModifyDate = noteData.getLong(6);
                     notes.add(item);
                     noteData.close();
                 }

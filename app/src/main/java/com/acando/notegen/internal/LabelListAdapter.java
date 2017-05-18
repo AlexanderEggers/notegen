@@ -1,6 +1,5 @@
 package com.acando.notegen.internal;
 
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -68,16 +67,24 @@ public class LabelListAdapter extends RecyclerView.Adapter<LabelListAdapter.Labe
         public LabelViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
-            activeIndicator = view.findViewById(R.id.active_indicator);
-            view.findViewById(R.id.label_layout).setOnClickListener(this);
+
+            if(mNoteID != -1) {
+                activeIndicator = view.findViewById(R.id.active_indicator);
+                view.findViewById(R.id.label_layout).setOnClickListener(this);
+            } else {
+                view.findViewById(R.id.active_indicator).setVisibility(View.GONE);
+            }
+
             view.findViewById(R.id.label_layout).setOnLongClickListener(this);
         }
 
         public void fillContent(Label label, boolean isActive) {
-            this.isActive = isActive;
-            activeIndicator.setBackgroundColor(isActive ?
-                    ContextCompat.getColor(mContext, R.color.label_active)
-                    : ContextCompat.getColor(mContext, R.color.label_not_active));
+            if(mNoteID != -1) {
+                this.isActive = isActive;
+                activeIndicator.setBackgroundColor(isActive ?
+                        ContextCompat.getColor(mContext, R.color.label_active)
+                        : ContextCompat.getColor(mContext, R.color.label_not_active));
+            }
             name.setText(label.name);
         }
 
