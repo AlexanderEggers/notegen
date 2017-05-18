@@ -3,15 +3,6 @@
     package="com.acando.notegen"
     android:installLocation="auto">
 
-    <uses-permission android:name="com.acando.notegen.api.READ" />
-
-    <permission
-        android:name="com.acando.notegen.api.READ"
-        android:description="@string/permission_desc"
-        android:icon="@drawable/ic_note_add_white_24dp"
-        android:label="Read access to your NoteGen Content"
-        android:protectionLevel="dangerous" />
-
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -78,13 +69,13 @@
 
 
         <receiver
-            android:name=".widget.WidgetProvider" android:permission="com.acando.notegen.api.READ">
+            android:name=".widget.WidgetProvider">
             <intent-filter>
 
                 <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <!-- To receive broadcast with this string name -->
-                <action android:name="com.acando.notegen.EXTRA_LIST_VIEW_ITEM_URL" />
+                <action android:name="com.acando.notegen.EXTRA_ADD_NOTE" />
                 <action android:name="com.acando.notegen.UPDATE_FORCE" />
                 <action android:name="com.acando.notegen.ADD_NOTE" />
             </intent-filter>

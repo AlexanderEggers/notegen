@@ -11,13 +11,12 @@ import android.widget.RemoteViews;
 
 import com.acando.notegen.DetailActivity;
 import com.acando.notegen.R;
-import com.acando.notegen.database.NoteTable;
 
 public class WidgetProvider extends AppWidgetProvider {
 
     public static final String UPDATE_FORCE = "com.acando.notegen.UPDATE_FORCE";
     public static final String ADD_NOTE = "com.acando.notegen.ADD_NOTE";
-    public static final String EXTRA_LIST_VIEW_ITEM_URL = "com.acando.notegen.EXTRA_LIST_VIEW_ITEM_URL";
+    public static final String EXTRA_ADD_NOTE = "com.acando.notegen.EXTRA_ADD_NOTE";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -26,7 +25,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             //ListView Click Event - part 1
             Intent toastIntent = new Intent(context, WidgetProvider.class);
-            toastIntent.setAction(WidgetProvider.EXTRA_LIST_VIEW_ITEM_URL);
+            toastIntent.setAction(WidgetProvider.EXTRA_ADD_NOTE);
             toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             PendingIntent toastPendingIntent = PendingIntent.getBroadcast(
                     context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -74,7 +73,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
                 //ListView Click Event - part 1
                 Intent toastIntent = new Intent(context, WidgetProvider.class);
-                toastIntent.setAction(WidgetProvider.EXTRA_LIST_VIEW_ITEM_URL);
+                toastIntent.setAction(WidgetProvider.EXTRA_ADD_NOTE);
                 toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                 PendingIntent toastPendingIntent = PendingIntent.getBroadcast(
                         context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -94,17 +93,10 @@ public class WidgetProvider extends AppWidgetProvider {
             Intent noteIntent = new Intent(context, DetailActivity.class);
             noteIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(noteIntent);
-        } else if(EXTRA_LIST_VIEW_ITEM_URL.equals(action)) {
+        } else if(EXTRA_ADD_NOTE.equals(action)) {
             Intent noteIntent = new Intent(context, DetailActivity.class);
             noteIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            noteIntent.putExtra("dataInline", true);
             noteIntent.putExtra("note_id", intent.getIntExtra("note_id", -1));
-            noteIntent.putExtra("note_title", intent.getStringExtra("note_title"));
-            noteIntent.putExtra("note_text", intent.getStringExtra("note_text"));
-            noteIntent.putExtra("note_image", intent.getByteArrayExtra("note_image"));
-            noteIntent.putExtra("note_archive", intent.getIntExtra("note_archive", NoteTable.FALSE));
-            noteIntent.putExtra("note_bin", intent.getIntExtra("note_bin", NoteTable.FALSE));
-            noteIntent.putExtra("modify_date", intent.getLongExtra("modify_date", -1));
             context.startActivity(noteIntent);
         }
     }

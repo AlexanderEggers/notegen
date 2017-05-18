@@ -1,6 +1,7 @@
 package com.acando.notegen;
 
 import android.app.Activity;
+import android.content.ContentProviderClient;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -44,6 +45,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     private Note mNoteItem;
     private EditText mTitle, mText;
+    private TextView mLastModify;
     private ImageView mImage;
     private boolean mHasUpdateItem;
     private LabelDetailAdapter adapter;
@@ -53,8 +55,19 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         super.onResume();
 
         if(mNoteItem.id != -1) {
-            getSupportLoaderManager().destroyLoader(0);
-            getSupportLoaderManager().initLoader(0, null, this);
+            ContentProviderClient cr = getContentResolver().acquireContentProviderClient(
+                    NoteContentProvider.AUTHORITY);
+            ArrayList<Note> updatedNote = UtilDatabase.getNotes(UtilDatabase.getNote(cr, mNoteItem.id));
+            if(!updatedNote.isEmpty()) {
+                mNoteItem = updatedNote.get(0);
+                updateExistingNote();
+                getSupportLoaderManager().destroyLoader(0);
+                getSupportLoaderManager().initLoader(0, null, this);
+                mHasUpdateItem = false;
+            } else {
+                mHasUpdateItem = false;
+                finish();
+            }
         }
     }
 
@@ -73,7 +86,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         mTitle = (EditText) findViewById(R.id.title);
         mText = (EditText) findViewById(R.id.text);
         mImage = (ImageView) findViewById(R.id.image);
-        TextView lastModify = (TextView) findViewById(R.id.last_modify);
+        mLastModify = (TextView) findViewById(R.id.last_modify);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.label_list);
         recyclerView.setHasFixedSize(false);
@@ -84,52 +97,49 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         adapter = new LabelDetailAdapter(this, new ArrayList<Label>());
         recyclerView.setAdapter(adapter);
 
-        boolean dataInline = getIntent().getBooleanExtra("dataInline", false);
-        if(dataInline) {
-            mNoteItem = new Note();
-            mNoteItem.id = getIntent().getIntExtra("note_id", -1);
-            mNoteItem.title = getIntent().getStringExtra("note_title");
-            mNoteItem.text = getIntent().getStringExtra("note_text");
-            mNoteItem.imageByte = getIntent().getByteArrayExtra("note_image");
-            mNoteItem.isArchive = getIntent().getIntExtra("note_archive", NoteTable.FALSE);
-            mNoteItem.isTrash = getIntent().getIntExtra("note_bin", NoteTable.FALSE);
-            mNoteItem.lastModifyDate = getIntent().getLongExtra("modify_date", -1);
-        } else {
-            mNoteItem = (Note) getIntent().getSerializableExtra("note_object");
-        }
+        mNoteItem = new Note();
+        mNoteItem.id = getIntent().getIntExtra("note_id", -1);
 
         if (mNoteItem != null) {
-            mTitle.setText(mNoteItem.title);
-            mText.setText(mNoteItem.text);
-
-            if(mNoteItem.imageByte != null && mNoteItem.imageByte.length != 0) {
-                mImage.setVisibility(View.VISIBLE);
-                mImage.setImageBitmap(BitmapFactory.decodeByteArray(mNoteItem.imageByte, 0,
-                        mNoteItem.imageByte.length));
-            }
-
-            Calendar cal = new GregorianCalendar();
-            cal.setTimeZone(TimeZone.getDefault());
-            cal.setTimeInMillis(mNoteItem.lastModifyDate);
-            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-            String formatted = formatter.format(cal.getTime());
-            lastModify.setText("Last modify: " + formatted);
+            updateExistingNote();
         } else {
-            mNoteItem = new Note();
-            mNoteItem.id = -1;
-            mNoteItem.title = "";
-            mNoteItem.text = "";
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeZone(TimeZone.getDefault());
-            cal.setTimeInMillis(System.currentTimeMillis());
-            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-            String formatted = formatter.format(cal.getTime());
-            lastModify.setText("Last modify: " + formatted);
+            createNewNote();
         }
 
         mTitle.addTextChangedListener(new CustomTextWatcher());
         mText.addTextChangedListener(new CustomTextWatcher());
+    }
+
+    private void updateExistingNote() {
+        mTitle.setText(mNoteItem.title);
+        mText.setText(mNoteItem.text);
+
+        if(mNoteItem.imageByte != null && mNoteItem.imageByte.length != 0) {
+            mImage.setVisibility(View.VISIBLE);
+            mImage.setImageBitmap(BitmapFactory.decodeByteArray(mNoteItem.imageByte, 0,
+                    mNoteItem.imageByte.length));
+        }
+
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeZone(TimeZone.getDefault());
+        cal.setTimeInMillis(mNoteItem.lastModifyDate);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        String formatted = formatter.format(cal.getTime());
+        mLastModify.setText("Last modify: " + formatted);
+    }
+
+    private void createNewNote() {
+        mNoteItem = new Note();
+        mNoteItem.id = -1;
+        mNoteItem.title = "";
+        mNoteItem.text = "";
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getDefault());
+        cal.setTimeInMillis(System.currentTimeMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        String formatted = formatter.format(cal.getTime());
+        mLastModify.setText("Last modify: " + formatted);
     }
 
     @Override

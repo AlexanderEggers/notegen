@@ -61,7 +61,7 @@ public class LabelListActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.label_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -71,7 +71,7 @@ public class LabelListActivity extends AppCompatActivity implements
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.add_item:
+            case R.id.add_label:
                 LabelDialog.newInstance(null).show(getSupportFragmentManager(), "LabelDialog");
                 return true;
             default:

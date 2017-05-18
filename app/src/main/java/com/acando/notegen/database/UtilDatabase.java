@@ -172,8 +172,8 @@ public class UtilDatabase {
                     item.id = noteData.getInt(0);
                     item.title = noteData.getString(1);
                     item.text = noteData.getString(2);
-                    item.isArchive = data.getInt(3);
-                    item.isTrash = data.getInt(4);
+                    item.isArchive = noteData.getInt(3);
+                    item.isTrash = noteData.getInt(4);
                     item.imageByte = noteData.getBlob(5);
                     item.lastModifyDate = noteData.getLong(6);
                     notes.add(item);
@@ -187,7 +187,7 @@ public class UtilDatabase {
         return notes;
     }
 
-    private static Cursor getNote(ContentProviderClient cr, int id) {
+    public static Cursor getNote(ContentProviderClient cr, int id) {
         Uri uri = Uri.parse(NoteContentProvider.CONTENT_URI + NoteContentProvider.NOTE_BASE + "/" + id);
         Cursor cursor = null;
 

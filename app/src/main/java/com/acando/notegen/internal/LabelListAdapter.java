@@ -1,5 +1,6 @@
 package com.acando.notegen.internal;
 
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.acando.notegen.LabelListActivity;
+import com.acando.notegen.NoteListActivity;
 import com.acando.notegen.R;
 import com.acando.notegen.database.UtilDatabase;
 
@@ -70,11 +72,11 @@ public class LabelListAdapter extends RecyclerView.Adapter<LabelListAdapter.Labe
 
             if(mNoteID != -1) {
                 activeIndicator = view.findViewById(R.id.active_indicator);
-                view.findViewById(R.id.label_layout).setOnClickListener(this);
             } else {
                 view.findViewById(R.id.active_indicator).setVisibility(View.GONE);
             }
 
+            view.findViewById(R.id.label_layout).setOnClickListener(this);
             view.findViewById(R.id.label_layout).setOnLongClickListener(this);
         }
 
@@ -90,15 +92,21 @@ public class LabelListAdapter extends RecyclerView.Adapter<LabelListAdapter.Labe
 
         @Override
         public void onClick(View v) {
-            if(!isActive) {
-                UtilDatabase.addLabelToNote(mContext, mLabelEntries.get(getAdapterPosition()).id, mNoteID);
+            if(mNoteID != -1) {
+                if(!isActive) {
+                    UtilDatabase.addLabelToNote(mContext, mLabelEntries.get(getAdapterPosition()).id, mNoteID);
+                } else {
+                    UtilDatabase.deleteLabelFromNote(mContext, mLabelEntries.get(getAdapterPosition()).id, mNoteID);
+                }
+                isActive = !isActive;
+                activeIndicator.setBackgroundColor(isActive ?
+                        ContextCompat.getColor(mContext, R.color.label_active)
+                        : ContextCompat.getColor(mContext, R.color.label_not_active));
             } else {
-                UtilDatabase.deleteLabelFromNote(mContext, mLabelEntries.get(getAdapterPosition()).id, mNoteID);
+                Intent intent = new Intent(mContext, NoteListActivity.class);
+                intent.putExtra("label_object", mLabelEntries.get(getAdapterPosition()));
+                mContext.startActivity(intent);
             }
-            isActive = !isActive;
-            activeIndicator.setBackgroundColor(isActive ?
-                    ContextCompat.getColor(mContext, R.color.label_active)
-                    : ContextCompat.getColor(mContext, R.color.label_not_active));
         }
 
         @Override

@@ -69,12 +69,6 @@ public final class ListProvider implements RemoteViewsService.RemoteViewsFactory
         Intent fillInIntent = new Intent();
         fillInIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         fillInIntent.putExtra("note_id", note.id);
-        fillInIntent.putExtra("note_title", note.title);
-        fillInIntent.putExtra("note_text", note.text);
-        fillInIntent.putExtra("note_image", note.imageByte);
-        fillInIntent.putExtra("note_archive", note.isArchive);
-        fillInIntent.putExtra("note_bin", note.isTrash);
-        fillInIntent.putExtra("modify_date", note.lastModifyDate);
         remoteView.setOnClickFillInIntent(R.id.widget_item_layout, fillInIntent);
 
         return remoteView;
