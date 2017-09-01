@@ -2,34 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/white" >
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:background="@color/colorPrimary"
         android:orientation="horizontal"
-        android:paddingStart="16dp"
         android:paddingEnd="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:paddingStart="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/app_name"
             android:gravity="center"
+            android:text="@string/app_name"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
         <Button
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:id="@+id/reload"
+            android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ADD NOTE"
             android:layout_alignParentEnd="true"
             android:background="@color/colorPrimaryDark"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="ADD NOTE"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -41,17 +41,17 @@
 
         <ListView
             android:id="@+id/listViewWidget"
-            android:divider="@null"
-            android:dividerHeight="0dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
 
         <TextView
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="No entries"
             android:gravity="center"
+            android:text="No entries"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
 

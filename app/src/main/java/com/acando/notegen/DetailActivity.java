@@ -268,9 +268,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             }
         }
 
-        Intent intent = new Intent();
-        intent.setAction(WidgetProvider.UPDATE_FORCE);
-        sendBroadcast(intent);
+        WidgetProvider.updateWidgets(this);
 
         return mNoteItem;
     }

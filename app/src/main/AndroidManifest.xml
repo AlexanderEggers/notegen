@@ -75,8 +75,7 @@
                 <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <!-- To receive broadcast with this string name -->
-                <action android:name="com.acando.notegen.EXTRA_ADD_NOTE" />
-                <action android:name="com.acando.notegen.UPDATE_FORCE" />
+                <action android:name="com.acando.notegen.EXTRA_EDIT_NOTE" />
                 <action android:name="com.acando.notegen.ADD_NOTE" />
             </intent-filter>
             <!-- linking up xml file of appwidget-provider to AppWidgetProvider -->
